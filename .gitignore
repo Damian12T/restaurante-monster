@@ -1,0 +1,17 @@
+# Compilación
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Imágenes de productos: se suben desde la aplicación y no se versionan
+wwwroot/resources/productos/*
+!wwwroot/resources/productos/.gitkeep
+
+# Configuración local
+appsettings.Development.local.json
+.env
+
+.DS_Store
+Thumbs.db

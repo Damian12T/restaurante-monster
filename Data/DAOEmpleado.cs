@@ -41,7 +41,7 @@ public class DAOEmpleado
         cmd.Parameters.AddWithValue("@N", e.Nombre);
         cmd.Parameters.AddWithValue("@A", e.Apellido);
         cmd.Parameters.AddWithValue("@C", e.Correo);
-        cmd.Parameters.AddWithValue("@P", Encriptador.Sha256(contrasena));
+        cmd.Parameters.AddWithValue("@P", Encriptador.HashContrasena(contrasena));
         cmd.Parameters.AddWithValue("@T", (object?)e.Telefono ?? DBNull.Value);
         cmd.ExecuteNonQuery();
     }

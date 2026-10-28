@@ -10,14 +10,31 @@ public class DAOUsuario
     {
         const string sql = @"SELECT u.*, r.nombre AS rol_nombre FROM usuario u
                              JOIN rol r ON u.id_rol = r.id_rol
-                             WHERE u.correo=@Correo AND u.contrasena=@Contrasena AND u.estado=1";
-        using var cn = Conexion.GetConexion();
-        cn.Open();
-        using var cmd = new SqlCommand(sql, cn);
-        cmd.Parameters.AddWithValue("@Correo", correo);
-        cmd.Parameters.AddWithValue("@Contrasena", Encriptador.Sha256(contrasena));
-        using var r = cmd.ExecuteReader();
-        return r.Read() ? Mapear(r) : null;
+                             WHERE u.correo=@Correo AND u.estado=1";
+        Usuario? usuario = null;
+        string? almacenado = null;
+        using (var cn = Conexion.GetConexion())
+        {
+            cn.Open();
+            using var cmd = new SqlCommand(sql, cn);
+            cmd.Parameters.AddWithValue("@Correo", correo);
+            using var r = cmd.ExecuteReader();
+            if (r.Read())
+            {
+                usuario = Mapear(r);
+                almacenado = r["contrasena"]?.ToString();
+            }
+        }
+
+        if (usuario == null)
+        {
+            // Mismo coste que una verificación real, para no revelar qué correos existen.
+            Encriptador.HashContrasena(contrasena);
+            return null;
+        }
+        if (!Encriptador.Verificar(contrasena, almacenado, out var requiereMigrar)) return null;
+        if (requiereMigrar) CambiarContrasena(usuario.IdUsuario, contrasena);
+        return usuario;
     }
 
     public List<Usuario> Listar()
@@ -65,7 +82,7 @@ public class DAOUsuario
         cmd.Parameters.AddWithValue("@N", u.Nombre);
         cmd.Parameters.AddWithValue("@A", u.Apellido);
         cmd.Parameters.AddWithValue("@C", u.Correo);
-        cmd.Parameters.AddWithValue("@P", Encriptador.Sha256(u.Contrasena));
+        cmd.Parameters.AddWithValue("@P", Encriptador.HashContrasena(u.Contrasena));
         cmd.Parameters.AddWithValue("@T", (object?)u.Telefono ?? DBNull.Value);
         cmd.Parameters.AddWithValue("@R", u.IdRol);
         return Convert.ToInt32(cmd.ExecuteScalar());
@@ -104,7 +121,7 @@ public class DAOUsuario
         using var cn = Conexion.GetConexion();
         cn.Open();
         using var cmd = new SqlCommand(sql, cn);
-        cmd.Parameters.AddWithValue("@P", Encriptador.Sha256(nuevaContrasena));
+        cmd.Parameters.AddWithValue("@P", Encriptador.HashContrasena(nuevaContrasena));
         cmd.Parameters.AddWithValue("@Id", id);
         cmd.ExecuteNonQuery();
     }

@@ -101,6 +101,7 @@ public class DAOFactura
     {
         IdFactura      = Convert.ToInt32(r["id_factura"]),
         IdPedido       = Convert.ToInt32(r["id_pedido"]),
+        IdUsuario      = r["id_usuario"] is DBNull ? null : Convert.ToInt32(r["id_usuario"]),
         Fecha          = r["fecha"]?.ToString(),
         Subtotal       = Convert.ToDouble(r["subtotal"]),
         CargoServicio  = Convert.ToDouble(r["cargo_servicio"]),

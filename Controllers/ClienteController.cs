@@ -99,7 +99,8 @@ public class ClienteController : BaseController
         if (!id.HasValue) return RedirectToAction("Menu");
 
         var factura = new DAOFactura().BuscarPorId(id.Value);
-        if (factura == null) return RedirectToAction("Menu");
+        // Un cliente solo puede ver las facturas de sus propios pedidos.
+        if (factura == null || factura.IdUsuario != GetUsuarioActual()!.IdUsuario) return RedirectToAction("Menu");
         factura.Detalles = new DAOPedido().ObtenerDetalles(factura.IdPedido);
         return View(factura);
     }

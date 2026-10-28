@@ -4,6 +4,7 @@ public class Factura
 {
     public int IdFactura { get; set; }
     public int IdPedido { get; set; }
+    public int? IdUsuario { get; set; }
     public string? Fecha { get; set; }
     public double Subtotal { get; set; }
     public double CargoServicio { get; set; }

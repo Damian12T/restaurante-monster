@@ -183,6 +183,12 @@ check('F10', 'Desactivar plato desde la vista', pulsado && db1(`SELECT disponibl
 await ir(admin, '/Admin/Platos');
 await pulsarEnFila(admin, plato, 'TogglePlato');
 check('F11', 'Reactivar plato desde la vista', db1(`SELECT disponible FROM plato WHERE id_plato=${idPlato}`) === '1');
+await admin.evaluate((t) => {
+  const fila = [...document.querySelectorAll('tr')].find((tr) => tr.innerText.includes(t));
+  [...fila.querySelectorAll('button')].find((b) => (b.getAttribute('onclick') ?? '').startsWith('editarPlato'))?.click();
+}, plato);
+const precioForm = await admin.evaluate(() => document.querySelector('form[action="/Admin/Platos"] [name=precio]').value);
+check('F26', 'El botón Editar de un plato carga el precio decimal correctamente', precioForm === '8.25', precioForm);
 await shot(admin, '03-admin-platos.png');
 
 // Bebidas
@@ -221,6 +227,11 @@ await ir(admin, '/Admin/Stock');
 await admin.evaluate((id) => { document.getElementById('cant-' + id).value = '77'; guardarFila(id); }, idStock);
 await new Promise((r) => setTimeout(r, 1500));
 check('F16', 'Actualizar stock de una fila', db1(`SELECT cantidad FROM stock WHERE id_stock=${idStock}`) === '77');
+await ir(admin, '/Admin/Stock');
+await admin.evaluate((id) => { document.getElementById('cant-' + id).value = '55'; }, idStock);
+await Promise.all([admin.waitForNavigation({ waitUntil: 'networkidle0' }), admin.evaluate(() => actualizarTodo())]);
+check('F27', 'Actualizar todo el stock (formulario)', db1(`SELECT cantidad FROM stock WHERE id_stock=${idStock}`) === '55');
+await shot(admin, '10-admin-stock.png');
 
 // ───────────────────────────── Sondas de seguridad del administrador
 const estadoAntes = db1(`SELECT disponible FROM plato WHERE id_plato=${idPlato}`);
@@ -251,6 +262,10 @@ await login(mesero, MESERO);
 check('F18', 'El mesero inicia sesión', mesero.url().includes('/Mesero/Dashboard'));
 await ir(mesero, '/Admin/Platos');
 check('F19', 'El mesero no accede a la administración', (await mesero.$('form[action="/Admin/Platos"]')) === null);
+const correoCliMes = `climes${S}@e2e.test`;
+await ir(mesero, '/Mesero/RegistrarCliente');
+await enviarFormulario(mesero, '/Mesero/RegistrarCliente', { nombre: 'Mario', apellido: 'Mesa', correo: correoCliMes, telefono: '', direccion: '', fechaNacimiento: '', contrasena: 'Clave#Segura1' });
+check('F28', 'El mesero registra un cliente', !!db1(`SELECT id_usuario FROM usuario WHERE correo='${correoCliMes}'`));
 await ir(mesero, '/Mesero/TomarPedido');
 await Promise.all([mesero.waitForNavigation({ waitUntil: 'networkidle0' }), mesero.evaluate((id) => agregarItem('PLATO', id), Number(idPlato))]);
 await shot(mesero, '04-mesero-pedido.png');
@@ -277,11 +292,13 @@ await shot(cliA, '06-cliente-menu.png');
 await cliA.evaluate((id) => ajustar('PLATO', id, 1), Number(idPlato));
 await new Promise((r) => setTimeout(r, 800));
 await ir(cliA, '/Cliente/Carrito');
+await Promise.all([cliA.waitForNavigation({ waitUntil: 'networkidle0' }), cliA.evaluate(() => cambiarCantidad(0, 3))]);
 await shot(cliA, '07-cliente-carrito.png');
 await Promise.all([cliA.waitForNavigation({ waitUntil: 'networkidle0' }),
   cliA.evaluate(() => document.querySelector('form[action="/Cliente/Pedido"]').requestSubmit())]);
 const facturaA = new URL(cliA.url()).searchParams.get('id') ?? cliA.url().split('/').pop();
 check('F23', 'El cliente confirma el pedido y ve su factura', cliA.url().includes('/Cliente/Factura') && (await texto(cliA)).includes('Ana'));
+check('F29', 'La cantidad modificada en el carrito llega al pedido', db1(`SELECT d.cantidad FROM detalle_pedido d JOIN factura f ON f.id_pedido=d.id_pedido WHERE f.id_factura=${facturaA}`) === '3');
 await shot(cliA, '08-cliente-factura.png');
 
 const cliB = await clienteNuevo('Beto', `beto${S}@e2e.test`);

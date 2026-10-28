@@ -7,6 +7,9 @@ namespace RestauranteMonster.Controllers;
 
 public class SeguridadController : BaseController
 {
+    private readonly ILogger<SeguridadController> _log;
+    public SeguridadController(ILogger<SeguridadController> log) => _log = log;
+
     [HttpGet]
     public IActionResult Login()
     {
@@ -30,7 +33,8 @@ public class SeguridadController : BaseController
         }
         catch (Exception ex)
         {
-            ViewBag.Error = "Error de conexión: " + ex.Message;
+            _log.LogError(ex, "Error al iniciar sesión");
+            ViewBag.Error = "No se pudo iniciar sesión. Inténtalo de nuevo más tarde.";
             return View();
         }
     }
@@ -76,7 +80,8 @@ public class SeguridadController : BaseController
         }
         catch (Exception ex)
         {
-            ViewBag.Error = "Error al registrarse: " + ex.Message;
+            _log.LogError(ex, "Error al registrar un cliente");
+            ViewBag.Error = "No se pudo completar el registro. Inténtalo de nuevo más tarde.";
             return View();
         }
     }

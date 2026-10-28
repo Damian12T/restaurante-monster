@@ -143,8 +143,9 @@ INSERT INTO rol (nombre) VALUES ('ADMIN'), ('MESERO'), ('CLIENTE');
 INSERT INTO tipo_plato (nombre) VALUES ('Entrada'), ('Sopa'), ('Plato Fuerte'), ('Postre');
 
 -- Usuarios iniciales
--- Contrasenas: Admin#Monster2025 y Mesero#Monster2025
--- LOWER(CONVERT) genera el mismo hash SHA-256 que el codigo C# (UTF-8 ASCII)
+-- Cuentas de demostracion: Admin#Monster2025 y Mesero#Monster2025 (cambiarlas fuera de un entorno de prueba)
+-- Se insertan con SHA-256 por compatibilidad con T-SQL; la aplicacion las convierte
+-- automaticamente a PBKDF2-SHA256 con sal en el primer inicio de sesion.
 INSERT INTO usuario (nombre, apellido, correo, contrasena, telefono, id_rol, estado) VALUES
 ('Admin', 'Monster', 'admin@monster.com',
  LOWER(CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', 'Admin#Monster2025'), 2)),

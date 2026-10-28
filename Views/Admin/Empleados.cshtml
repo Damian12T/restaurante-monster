@@ -32,7 +32,7 @@
                             </span>
                         </td>
                         <td>
-                            <button onclick="editarEmpleado(@e.IdUsuario,'@Html.Raw(e.Nombre.Replace("'","\'"))','@Html.Raw(e.Apellido.Replace("'","\'"))','@e.Correo','@(e.Telefono??"")')"
+                            <button onclick="editarEmpleado(@e.IdUsuario,@Js.Cadena(e.Nombre),@Js.Cadena(e.Apellido),@Js.Cadena(e.Correo),@Js.Cadena(e.Telefono))"
                                     class="btn btn-sm btn-secondary">✏️</button>
                             @if (e.Estado == 1)
                             { <a href="/Admin/ToggleEmpleado?id=@e.IdUsuario&estado=0" class="btn btn-sm btn-warning">Desactivar</a> }

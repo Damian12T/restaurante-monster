@@ -26,10 +26,10 @@
                         <td class="text-muted">@t.IdTipo</td>
                         <td><strong>@t.Nombre</strong></td>
                         <td>
-                            <button onclick="editarTipo(@t.IdTipo,'@Html.Raw(t.Nombre.Replace("'","\'"))')"
+                            <button onclick="editarTipo(@t.IdTipo,@Js.Cadena(t.Nombre))"
                                     class="btn btn-sm btn-secondary">✏️ Editar</button>
                             <a href="/Admin/EliminarCategoria?id=@t.IdTipo" class="btn btn-sm btn-danger"
-                               onclick="return confirm('¿Eliminar categoría @t.Nombre?')">🗑️</a>
+                               onclick="return confirm('¿Eliminar categoría ' + @Js.Cadena(t.Nombre) + '?')">🗑️</a>
                         </td>
                     </tr>
                 }

@@ -29,7 +29,7 @@
                         <td>@(c.Direccion ?? "—")</td>
                         <td>@(c.FechaNacimiento ?? "—")</td>
                         <td>
-                            <button onclick="editarCliente(@c.IdCliente,@c.IdUsuario,'@Html.Raw(c.Nombre.Replace("'","\'"))','@Html.Raw(c.Apellido.Replace("'","\'"))','@c.Correo','@(c.Telefono??"")','@(c.Direccion??"")','@(c.FechaNacimiento??"")')"
+                            <button onclick="editarCliente(@c.IdCliente,@c.IdUsuario,@Js.Cadena(c.Nombre),@Js.Cadena(c.Apellido),@Js.Cadena(c.Correo),@Js.Cadena(c.Telefono),@Js.Cadena(c.Direccion),@Js.Cadena(c.FechaNacimiento))"
                                     class="btn btn-sm btn-secondary">✏️ Editar</button>
                         </td>
                     </tr>

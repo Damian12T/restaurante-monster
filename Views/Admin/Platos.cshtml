@@ -40,7 +40,7 @@
                             </span>
                         </td>
                         <td>
-                            <button onclick="editarPlato(@p.IdPlato,'@Html.Raw(p.Nombre.Replace("'","\'"))','@Html.Raw((p.Descripcion??string.Empty).Replace("'","\'"))',@p.Precio,@p.IdTipo)"
+                            <button onclick="editarPlato(@p.IdPlato,@Js.Cadena(p.Nombre),@Js.Cadena(p.Descripcion),@Js.Numero(p.Precio),@p.IdTipo)"
                                     class="btn btn-sm btn-secondary">✏️</button>
                             @if (p.Disponible)
                             {

@@ -59,7 +59,7 @@ public class AdminController : BaseController
         return RedirectToAction("Platos");
     }
 
-    [HttpGet]
+    [HttpPost]
     public IActionResult TogglePlato(int id, bool disponible)
     {
         var r = CheckRole("ADMIN"); if (r != null) return r;
@@ -98,7 +98,7 @@ public class AdminController : BaseController
         return RedirectToAction("Bebidas");
     }
 
-    [HttpGet]
+    [HttpPost]
     public IActionResult ToggleBebida(int id, bool disponible)
     {
         var r = CheckRole("ADMIN"); if (r != null) return r;
@@ -132,7 +132,7 @@ public class AdminController : BaseController
         return RedirectToAction("Categorias");
     }
 
-    [HttpGet]
+    [HttpPost]
     public IActionResult EliminarCategoria(int id)
     {
         var r = CheckRole("ADMIN"); if (r != null) return r;
@@ -230,7 +230,7 @@ public class AdminController : BaseController
         return RedirectToAction("Empleados");
     }
 
-    [HttpGet]
+    [HttpPost]
     public IActionResult ToggleEmpleado(int id, int estado)
     {
         var r = CheckRole("ADMIN"); if (r != null) return r;

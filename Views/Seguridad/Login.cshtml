@@ -28,6 +28,7 @@
         }
 
         <form method="post" action="/Seguridad/Login">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label">Correo electrónico</label>
                 <input type="email" name="correo" class="form-control"

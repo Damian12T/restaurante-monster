@@ -11,8 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@(ViewData["Title"] != null ? ViewData["Title"] + " — " : "")Restaurante Monster</title>
     <link rel="stylesheet" href="~/css/estilos.css" />
+    <script src="~/js/antiforgery.js"></script>
 </head>
 <body>
+@Html.AntiForgeryToken()
 <div class="topbar">
     <h1>🍔 Restaurante Monster</h1>
     <div class="topbar-right">

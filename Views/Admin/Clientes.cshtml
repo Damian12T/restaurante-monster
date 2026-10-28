@@ -47,6 +47,7 @@
             <button class="modal-close" onclick="closeModal('modal-cli')">×</button>
         </div>
         <form method="post" action="/Admin/Clientes">
+            @Html.AntiForgeryToken()
             <input type="hidden" name="idCliente" id="idCliente" value="0" />
             <input type="hidden" name="idUsuario" id="cIdUsuario" value="0" />
             <div class="form-grid">

@@ -28,8 +28,7 @@
                         <td>
                             <button onclick="editarTipo(@t.IdTipo,@Js.Cadena(t.Nombre))"
                                     class="btn btn-sm btn-secondary">✏️ Editar</button>
-                            <a href="/Admin/EliminarCategoria?id=@t.IdTipo" class="btn btn-sm btn-danger"
-                               onclick="return confirm('¿Eliminar categoría ' + @Js.Cadena(t.Nombre) + '?')">🗑️</a>
+                            <form method="post" action="/Admin/EliminarCategoria" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@t.IdTipo" /><button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar categoría ' + @Js.Cadena(t.Nombre) + '?')">🗑️</button></form>
                         </td>
                     </tr>
                 }
@@ -46,6 +45,7 @@
             <button class="modal-close" onclick="closeModal('modal-cat')">×</button>
         </div>
         <form method="post" action="/Admin/Categorias">
+            @Html.AntiForgeryToken()
             <input type="hidden" name="idTipo" id="idTipo" value="0" />
             <div class="form-group">
                 <label class="form-label">Nombre *</label>

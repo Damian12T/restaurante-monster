@@ -30,6 +30,7 @@
             <h2 class="card-title">Datos del cliente</h2>
         </div>
         <form method="post" action="/Mesero/RegistrarCliente" style="padding:20px">
+            @Html.AntiForgeryToken()
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">Nombre *</label>

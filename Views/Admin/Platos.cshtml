@@ -44,11 +44,11 @@
                                     class="btn btn-sm btn-secondary">✏️</button>
                             @if (p.Disponible)
                             {
-                                <a href="/Admin/TogglePlato?id=@p.IdPlato&disponible=false" class="btn btn-sm btn-warning">⬇</a>
+                                <form method="post" action="/Admin/TogglePlato" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@p.IdPlato" /><input type="hidden" name="disponible" value="false" /><button type="submit" class="btn btn-sm btn-warning">⬇</button></form>
                             }
                             else
                             {
-                                <a href="/Admin/TogglePlato?id=@p.IdPlato&disponible=true" class="btn btn-sm btn-success">⬆</a>
+                                <form method="post" action="/Admin/TogglePlato" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@p.IdPlato" /><input type="hidden" name="disponible" value="true" /><button type="submit" class="btn btn-sm btn-success">⬆</button></form>
                             }
                         </td>
                     </tr>
@@ -67,6 +67,7 @@
             <button class="modal-close" onclick="closeModal('modal-plato')">×</button>
         </div>
         <form method="post" action="/Admin/Platos" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
             <input type="hidden" name="idPlato" id="idPlato" value="0" />
             <div class="form-group">
                 <label class="form-label">Nombre *</label>

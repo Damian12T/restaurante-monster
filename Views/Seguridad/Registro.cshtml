@@ -24,6 +24,7 @@
         }
 
         <form method="post" action="/Seguridad/Registro">
+            @Html.AntiForgeryToken()
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">Nombre</label>

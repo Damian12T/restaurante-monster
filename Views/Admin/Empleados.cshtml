@@ -35,9 +35,9 @@
                             <button onclick="editarEmpleado(@e.IdUsuario,@Js.Cadena(e.Nombre),@Js.Cadena(e.Apellido),@Js.Cadena(e.Correo),@Js.Cadena(e.Telefono))"
                                     class="btn btn-sm btn-secondary">✏️</button>
                             @if (e.Estado == 1)
-                            { <a href="/Admin/ToggleEmpleado?id=@e.IdUsuario&estado=0" class="btn btn-sm btn-warning">Desactivar</a> }
+                            { <form method="post" action="/Admin/ToggleEmpleado" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@e.IdUsuario" /><input type="hidden" name="estado" value="0" /><button type="submit" class="btn btn-sm btn-warning">Desactivar</button></form> }
                             else
-                            { <a href="/Admin/ToggleEmpleado?id=@e.IdUsuario&estado=1" class="btn btn-sm btn-success">Activar</a> }
+                            { <form method="post" action="/Admin/ToggleEmpleado" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@e.IdUsuario" /><input type="hidden" name="estado" value="1" /><button type="submit" class="btn btn-sm btn-success">Activar</button></form> }
                         </td>
                     </tr>
                 }
@@ -54,6 +54,7 @@
             <button class="modal-close" onclick="closeModal('modal-emp')">×</button>
         </div>
         <form method="post" action="/Admin/Empleados">
+            @Html.AntiForgeryToken()
             <input type="hidden" name="idUsuario" id="idUsuario" value="0" />
             <div class="form-grid">
                 <div class="form-group">

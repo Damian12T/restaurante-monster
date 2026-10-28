@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
 using RestauranteMonster.Data;
 using RestauranteMonster.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+// Todo POST, PUT o DELETE debe llevar un token antiforgery válido.
+builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -12,6 +14,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
     options.Cookie.Name = ".RestauranteMonster.Session";
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
 var app = builder.Build();
@@ -25,6 +29,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.Use(async (contexto, siguiente) =>
+{
+    var h = contexto.Response.Headers;
+    h["X-Content-Type-Options"] = "nosniff";
+    h["X-Frame-Options"] = "DENY";
+    h["Referrer-Policy"] = "same-origin";
+    await siguiente();
+});
 
 // Soporte para AVIF y WEBP como tipos estáticos
 var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();

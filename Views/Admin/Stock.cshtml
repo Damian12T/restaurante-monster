@@ -17,6 +17,7 @@
 
     <!-- Formulario oculto para "Actualizar todo" -->
     <form id="form-todo" method="post" action="/Admin/ActualizarTodoStock" style="display:none">
+            @Html.AntiForgeryToken()
         @foreach (var s in stock)
         {
             <input type="hidden" name="ids" value="@s.IdStock" />

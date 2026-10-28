@@ -41,9 +41,9 @@
                             <button onclick="editarBebida(@b.IdBebida,@Js.Cadena(b.Nombre),@Js.Cadena(b.Descripcion),@Js.Numero(b.Precio))"
                                     class="btn btn-sm btn-secondary">✏️</button>
                             @if (b.Disponible)
-                            { <a href="/Admin/ToggleBebida?id=@b.IdBebida&disponible=false" class="btn btn-sm btn-warning">⬇</a> }
+                            { <form method="post" action="/Admin/ToggleBebida" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@b.IdBebida" /><input type="hidden" name="disponible" value="false" /><button type="submit" class="btn btn-sm btn-warning">⬇</button></form> }
                             else
-                            { <a href="/Admin/ToggleBebida?id=@b.IdBebida&disponible=true"  class="btn btn-sm btn-success">⬆</a> }
+                            { <form method="post" action="/Admin/ToggleBebida" style="display:inline">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@b.IdBebida" /><input type="hidden" name="disponible" value="true" /><button type="submit" class="btn btn-sm btn-success">⬆</button></form> }
                         </td>
                     </tr>
                 }
@@ -60,6 +60,7 @@
             <button class="modal-close" onclick="closeModal('modal-bebida')">×</button>
         </div>
         <form method="post" action="/Admin/Bebidas" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
             <input type="hidden" name="idBebida" id="idBebida" value="0" />
             <div class="form-group">
                 <label class="form-label">Nombre *</label>
